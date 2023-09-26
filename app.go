@@ -275,6 +275,23 @@ func (r *ResticBrowserApp) OpenRepo(location restic.Location) ([]*restic.Snapsho
 	return snapshots, nil
 }
 
+func (r *ResticBrowserApp) InitRepo(location restic.Location) (*restic.Repository, error) {
+	if r.restic == nil {
+		return nil, fmt.Errorf("failed to find restic program")
+	}
+
+	repo := restic.NewRepository(location, r.restic)
+
+	err := repo.Create()
+	if err != nil {
+		return nil, err
+	}
+
+	r.repo = repo
+
+	return repo, nil
+}
+
 func (r *ResticBrowserApp) GetFilesForPath(snapshotID, path string) ([]*restic.File, error) {
 	snapshot := r.snapshots[snapshotID]
 	if snapshot == nil {

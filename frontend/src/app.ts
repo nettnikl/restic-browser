@@ -23,6 +23,8 @@ export class ResticBrowserApp extends MobxLitElement {
   
   @state()
   private _showLocationDialog: boolean = false;
+  @state()
+  private _showInitRepoDialog: boolean = false;
 
   constructor() {
     super();
@@ -30,8 +32,12 @@ export class ResticBrowserApp extends MobxLitElement {
   }
   
   private _keyDownHandler(event: KeyboardEvent) {
-    if (event.ctrlKey && event.key == "o") {
+    if (!this._showInitRepoDialog && event.ctrlKey && event.key == "o") {
       this._showLocationDialog = true;
+      event.preventDefault();
+    }
+    if (!this._showLocationDialog && event.ctrlKey && event.key == "n") {
+      this._showInitRepoDialog = true;
       event.preventDefault();
     }
   }
@@ -87,10 +93,25 @@ export class ResticBrowserApp extends MobxLitElement {
         </restic-browser-location-dialog>
       `;
     }
+    // create new repository dialog
+    if (this._showInitRepoDialog) {
+      return html`
+        <restic-browser-location-dialog
+            title="Create new repository"
+          .onClose=${() => {
+            this._showInitRepoDialog = false;
+            appState.initRepository();
+          }}
+          .onCancel=${() => {
+            this._showInitRepoDialog = false; 
+          }}>
+        </restic-browser-location-dialog>
+      `;
+    }
     // repository error
     if (appState.repoError || ! appState.repoLocation.path) {
       const errorMessage = appState.repoError ? 
-        `Failed to open repository: ${appState.repoError}` : 
+        `Failed to open repository: ${appState.repoError}` :
         "No repository selected";
       return html`
         <vaadin-vertical-layout id="layout">
@@ -103,6 +124,10 @@ export class ResticBrowserApp extends MobxLitElement {
               type=${appState.repoError ? "error" : "info"} 
               message=${errorMessage}>
           </restic-browser-error-message>
+          <vaadin-button theme="primary"
+                         @click=${() => this._showInitRepoDialog = true }>
+            Create new Repository
+          </vaadin-button>
         </vaadin-vertical-layout>
       `;
     }

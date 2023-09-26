@@ -18,6 +18,10 @@ export function GetFilesForPath(arg1, arg2) {
   return window['go']['main']['ResticBrowserApp']['GetFilesForPath'](arg1, arg2);
 }
 
+export function InitRepo(arg1) {
+  return window['go']['main']['ResticBrowserApp']['InitRepo'](arg1);
+}
+
 export function OpenFileOrUrl(arg1) {
   return window['go']['main']['ResticBrowserApp']['OpenFileOrUrl'](arg1);
 }

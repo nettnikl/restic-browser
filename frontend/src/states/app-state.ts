@@ -1,6 +1,6 @@
 import * as mobx from 'mobx';
 
-import { DefaultRepoLocation, DumpFile, DumpFileToTemp, GetFilesForPath, OpenFileOrUrl, OpenRepo, RestoreFile }
+import {DefaultRepoLocation, DumpFile, DumpFileToTemp, GetFilesForPath, InitRepo, OpenFileOrUrl, OpenRepo, RestoreFile}
   from '../../wailsjs/go/main/ResticBrowserApp';
 
 import { restic } from '../../wailsjs/go/models';
@@ -75,13 +75,32 @@ class AppState {
           }
         }
         this._filesCache.clear();
-        --this.isLoadingSnapshots; 
+        --this.isLoadingSnapshots;
       }))
       .catch(mobx.action((err) => {
         this.repoError = err.message || String(err);
         this.snapShots = [];
         this.selectedSnapshotID = "";
-        --this.isLoadingSnapshots; 
+        --this.isLoadingSnapshots;
+      }));
+  }
+
+  // create a new repository
+  @mobx.action
+  initRepository(): void {
+    ++this.isLoadingSnapshots;
+    this.repoError = "";
+    InitRepo(restic.Location.createFrom(this.repoLocation))
+      .then(mobx.action((_: any) => {
+        this.repoError = "";
+        this._filesCache.clear();
+        --this.isLoadingSnapshots;
+      }))
+      .catch(mobx.action((err: Error) => {
+        this.repoError = err.message || String(err);
+        this.snapShots = [];
+        this.selectedSnapshotID = "";
+        --this.isLoadingSnapshots;
       }));
   }
   
