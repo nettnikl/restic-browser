@@ -30,6 +30,9 @@ export class ResticBrowserLocationDialog extends MobxLitElement {
 
   @property()
   onCancel!: () => void;
+
+  @property()
+  title: string = "Open Repository";
  
   @state()
   _handledClose: boolean = false;
@@ -160,7 +163,7 @@ export class ResticBrowserLocationDialog extends MobxLitElement {
 
     return html`
       <vaadin-dialog
-        header-title="Open Repository"
+        header-title=${this.title}
         .opened=${true}
         @opened-changed=${(event: CustomEvent) => {
           if (! event.detail.value && ! this._handledClose) {
