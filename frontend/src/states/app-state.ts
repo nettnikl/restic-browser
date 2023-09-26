@@ -78,7 +78,7 @@ class AppState {
         --this.isLoadingSnapshots;
       }))
       .catch(mobx.action((err) => {
-        this.repoError = err.message || String(err);
+        this.repoError = `Failed to open repository: ${err.message || String(err)}`;
         this.snapShots = [];
         this.selectedSnapshotID = "";
         --this.isLoadingSnapshots;
@@ -97,7 +97,7 @@ class AppState {
         --this.isLoadingSnapshots;
       }))
       .catch(mobx.action((err: Error) => {
-        this.repoError = err.message || String(err);
+        this.repoError = `Failed to create repository: ${err.message || String(err)}`;
         this.snapShots = [];
         this.selectedSnapshotID = "";
         --this.isLoadingSnapshots;

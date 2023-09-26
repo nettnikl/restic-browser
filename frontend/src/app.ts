@@ -110,9 +110,7 @@ export class ResticBrowserApp extends MobxLitElement {
     }
     // repository error
     if (appState.repoError || ! appState.repoLocation.path) {
-      const errorMessage = appState.repoError ? 
-        `Failed to open repository: ${appState.repoError}` :
-        "No repository selected";
+      const errorMessage = appState.repoError ? appState.repoError : "No repository selected";
       return html`
         <vaadin-vertical-layout id="layout">
           <restic-browser-app-header id="header" 
