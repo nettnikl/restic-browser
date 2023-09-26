@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/leaanthony/sail v0.3.0
 	github.com/pkg/errors v0.9.1
-	github.com/wailsapp/wails/v2 v2.4.1
+	github.com/wailsapp/wails/v2 v2.5.1
 	golang.org/x/sys v0.5.0
 	golang.org/x/text v0.7.0
 )
