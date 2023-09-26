@@ -43,6 +43,15 @@ func IsDirectoryARepository(basedir string) bool {
 	return true
 }
 
+func (r *Repository) Create() error {
+	stdout, stderr, code, err := r.run("init")
+	if code != 0 || err != nil {
+		return fmt.Errorf(stderr)
+	}
+	fmt.Sprint(stdout)
+	return nil
+}
+
 func (r *Repository) GetSnapshots() ([]*Snapshot, error) {
 	stdout, stderr, code, err := r.run("snapshots", "--json")
 	if code != 0 || err != nil {
